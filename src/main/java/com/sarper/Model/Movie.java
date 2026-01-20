@@ -30,7 +30,4 @@ public class Movie {
     @Column(name = "description")
     private String movieDescription;
 
-    @OneToMany(mappedBy = "movie")
-    private List<Review> reviews;
-
 }
