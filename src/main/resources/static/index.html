@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Review App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .movie-list {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .movie-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .movie-item:last-child {
+            border-bottom: none;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h1>Movie Review App</h1>
+
+<div class="movie-list">
+    <h2>Movies</h2>
+    <button onclick="loadMovies()">Load Movies</button>
+    <div id="movies"></div>
+</div>
+
+<script>
+        // Base API URL
+        const API_URL = 'http://localhost:8080/api';
+
+        // Load movies from API
+        async function loadMovies() {
+            try {
+                const response = await fetch(`${API_URL}/movies`);
+                const movies = await response.json();
+
+                const moviesDiv = document.getElementById('movies');
+                moviesDiv.innerHTML = '';
+
+                movies.forEach(movie => {
+                    const movieDiv = document.createElement('div');
+                    movieDiv.className = 'movie-item';
+                    movieDiv.innerHTML = `
+                        <h3>${movie.movieName}</h3>
+                        <p><strong>Director:</strong> ${movie.directorName}</p>
+                        <p><strong>Genre:</strong> ${movie.genre}</p>
+                        <p>${movie.movieDescription}</p>
+                        <button onclick="viewReviews(${movie.id})">View Reviews</button>
+                    `;
+                    moviesDiv.appendChild(movieDiv);
+                });
+            } catch (error) {
+                console.error('Error loading movies:', error);
+                alert('Failed to load movies');
+            }
+        }
+
+        // View reviews for a movie
+        async function viewReviews(movieId) {
+            try {
+                const response = await fetch(`${API_URL}/reviews/movie/${movieId}`);
+                const reviews = await response.json();
+
+                if (reviews.length === 0) {
+                    alert('No reviews yet for this movie');
+                    return;
+                }
+
+                let reviewText = 'Reviews:\n\n';
+                reviews.forEach(review => {
+                    reviewText += `${review.stars} stars\n`;
+                    reviewText += `"${review.comment}"\n\n`;
+                });
+
+                alert(reviewText);
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+                alert('Failed to load reviews');
+            }
+        }
+
+        // Load movies when page loads
+        window.onload = loadMovies;
+    </script>
+</body>
+</html>

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/api/movies")
 public class MovieController implements IMovieController {
@@ -20,4 +22,12 @@ public class MovieController implements IMovieController {
     public Movie getMovie(@PathVariable Long id) {
         return movieService.getMovie(id);
     }
+
+    @Override
+    @GetMapping
+    public List<Movie> getAllMovies() {
+        return movieService.getAllMovies();
+    }
+
+
 }
