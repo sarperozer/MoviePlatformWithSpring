@@ -1,11 +1,13 @@
 package com.sarper.jwt;
 
+import com.sarper.Model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -20,6 +22,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtils {
 
+
     @Value("${SECRET_KEY}")
     private String SECRET_KEY;
 
@@ -28,12 +31,14 @@ public class JwtUtils {
         System.out.println("SECRET_KEY loaded: " + SECRET_KEY);
     }
 
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(User user){
 
         HashMap<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole());
+
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
                 .setClaims(claims)
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -53,8 +58,12 @@ public class JwtUtils {
         return getExpirationDateFromToken(token).before(new Date());
     }
 
-    private Date getExpirationDateFromToken(String token){
+    public Date getExpirationDateFromToken(String token){
         return extractAllClaims(token).getExpiration();
+    }
+
+    public String getRole(String token){
+        return extractAllClaims(token).get("role", String.class);
     }
 
     private Claims extractAllClaims(String token){

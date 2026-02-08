@@ -40,8 +40,15 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @Column
+    private String role;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of();
     }
+
 }
+
+
+

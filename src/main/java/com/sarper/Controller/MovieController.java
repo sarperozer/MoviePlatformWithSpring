@@ -4,6 +4,7 @@ import com.sarper.Controller.interfaces.IMovieController;
 import com.sarper.Model.Movie;
 import com.sarper.Service.interfaces.IMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ public class MovieController implements IMovieController {
     private IMovieService movieService;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/{id}")
     public Movie getMovie(@PathVariable Long id) {
         return movieService.getMovie(id);

@@ -1,10 +1,12 @@
 package com.sarper.Controller.interfaces;
 
-import com.sarper.Dto.AuthRequest;
+import com.sarper.Dto.LoginRequest;
+import com.sarper.Dto.RegisterRequest;
 import com.sarper.Dto.UserDto;
-import com.sarper.Model.User;
 
 public interface IAuthController {
 
-    UserDto register(AuthRequest authRequest);
+    UserDto register(RegisterRequest registerRequest);
+
+    String authenticate(LoginRequest loginRequest);
 }
