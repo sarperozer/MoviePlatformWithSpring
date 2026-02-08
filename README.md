@@ -57,31 +57,6 @@ The API will be available at `http://localhost:8080`
 | POST | `/api/auth/register` | Register new user | Public |
 | POST | `/api/auth/login` | Login user | Public |
 
-**Register Request:**
-```json
-{
-  "username": "sarper",
-  "password": "password123",
-  "role": "USER"
-}
-```
-
-**Login Request:**
-```json
-{
-  "username": "sarper",
-  "password": "password123"
-}
-```
-
-**Login Response:**
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "role": "USER"
-}
-```
-
 ### Movies
 
 | Method | Endpoint | Description | Access |
