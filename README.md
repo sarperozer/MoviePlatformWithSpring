@@ -97,18 +97,23 @@ The API will be available at `http://localhost:8080`
 - `username` (UNIQUE)
 - `password` (ENCRYPTED)
 - `role` (USER/ADMIN)
+- `created_at`
 
 ### Movies Table
 - `id` (PRIMARY KEY)
-- `title`
+- `movie_name`
 - `description`
-- `year`
+- `director_name`
+- `genre`
+- `created_at`
+- `updated_at`
 
 ### Comments Table
 - `id` (PRIMARY KEY)
 - `movie_id` (FOREIGN KEY)
 - `user_id` (FOREIGN KEY)
-- `text`
+- `comment`
+- `stars`
 - `created_at`
 - `updated_at`
 
