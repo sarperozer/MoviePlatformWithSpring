@@ -9,7 +9,7 @@ public interface IMovieService {
 
     Movie getMovie(Long movieId);
 
-    List<Movie> getAllMovies();
+    List<MovieDto> getMovies(String director, String genre);
 
     MovieDto addMovie(MovieDto movieDto);
 

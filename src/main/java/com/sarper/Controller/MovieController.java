@@ -25,8 +25,11 @@ public class MovieController implements IMovieController {
 
     @Override
     @GetMapping
-    public List<Movie> getAllMovies() {
-        return movieService.getAllMovies();
+    public List<MovieDto> getMovies(
+            @RequestParam(required = false) String director,
+            @RequestParam(required = false) String genre
+    ) {
+        return movieService.getMovies(director, genre);
     }
 
     @Override

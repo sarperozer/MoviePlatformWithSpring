@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +24,26 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public List<Movie> getAllMovies(){
-        return movieRepository.findAll();
+    public List<MovieDto> getMovies(String director, String genre){
+
+        List<Movie> movies;
+        List<MovieDto> movieDtos = new ArrayList<>();
+
+        if(director != null && genre != null) movies = movieRepository.findByGenreContainingIgnoreCaseAndDirectorNameContainingIgnoreCase(genre, director);
+
+        else if (director != null) movies = movieRepository.findByDirectorNameContainingIgnoreCase(director);
+
+        else if (genre != null) movies = movieRepository.findByGenreContainingIgnoreCase(genre);
+
+        else movies = movieRepository.findAll();
+
+        for (Movie movie : movies) {
+            MovieDto movieDto = new MovieDto();
+            BeanUtils.copyProperties(movie, movieDto);
+            movieDtos.add(movieDto);
+        }
+
+        return movieDtos;
     }
 
     @Override
