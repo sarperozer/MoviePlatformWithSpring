@@ -63,32 +63,32 @@ The API will be available at `http://localhost:8080`
 |--------|----------|-------------|--------|
 | GET | `/api/movies` | Get all movies | Public |
 | GET | `/api/movies/{id}` | Get movie by ID | Public |
-| POST | `/api/admin/movies` | Create new movie | Admin |
-| PUT | `/api/admin/movies/{id}` | Update movie | Admin |
-| DELETE | `/api/admin/movies/{id}` | Delete movie | Admin |
+| POST | `/api/movies/` | Create new movie | Admin |
+| PUT | `/api/movies/{id}` | Update movie | Admin |
+| DELETE | `/api/movies/{id}` | Delete movie | Admin |
 
-### Comments
+### Reviews
 
-| Method | Endpoint | Description | Access |
-|--------|----------|-------------|--------|
-| GET | `/api/movies/{movieId}/comments` | Get movie comments | Public |
-| POST | `/api/movies/{movieId}/comments` | Add comment | Authenticated |
-| PUT | `/api/movies/comments/{commentId}` | Update own comment | Authenticated |
-| DELETE | `/api/movies/comments/{commentId}` | Delete own comment | Authenticated |
-| DELETE | `/api/admin/comments/{commentId}` | Delete any comment | Admin |
+| Method | Endpoint                          | Description            | Access                                                   |
+|--------|-----------------------------------|------------------------|----------------------------------------------------------|
+| GET | `/api/reviews/movie/{movieId}`    | Get movie reviews      | User                                                     |
+| GET | `/api/reviews/user/{userId}`      | Get a user's reviews   | User                                            |
+| POST | `/api/reviews/movie/{movieId}`    | Add review for a movie | User                                            |
+| PUT | `/api/reviews/{reviewId}`         | Update own review      | User                                            |
+| DELETE | `/api/reviews/{reviewId}`         | Delete review          | User for own reviews<br/> Admin for all reviews |
 
 
 ## Roles & Permissions
 
 ### USER
-- View movies
-- Add comments
-- Edit/delete own comments
+- View movies and reviews
+- Add reviews
+- Edit/update/delete own reviews
 
 ### ADMIN
 - All USER permissions
 - Create/update/delete movies
-- Delete any comment (moderation)
+- Delete any review (moderation)
 
 ## Database Schema
 
