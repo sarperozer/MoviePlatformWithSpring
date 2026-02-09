@@ -14,6 +14,7 @@ public class UserController implements IUserController {
     private IUserService userService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public User addUser(@RequestBody User user) {
         return userService.addUser(user);

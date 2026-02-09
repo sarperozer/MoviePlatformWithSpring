@@ -9,4 +9,6 @@ public interface IMovieController {
     Movie getMovie(Long movieId);
 
     List<Movie> getAllMovies();
+
+
 }

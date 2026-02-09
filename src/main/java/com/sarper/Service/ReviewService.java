@@ -1,7 +1,6 @@
 package com.sarper.Service;
 
-import com.sarper.Dto.ReviewRequest;
-import com.sarper.Dto.ReviewResponse;
+import com.sarper.Dto.ReviewDto;
 import com.sarper.Model.Movie;
 import com.sarper.Model.Review;
 import com.sarper.Model.User;
@@ -11,11 +10,11 @@ import com.sarper.Repository.UserRepository;
 import com.sarper.Service.interfaces.IReviewService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReviewService implements IReviewService {
@@ -30,34 +29,55 @@ public class ReviewService implements IReviewService {
     private UserRepository userRepository;
 
     @Override
-    public ReviewResponse addReview(ReviewRequest reviewRequest) {
+    public ReviewDto addReview(ReviewDto reviewDto, Long movieId, Authentication authentication) {
         Review review = new Review();
-        ReviewResponse reviewResponse = new ReviewResponse(reviewRequest.getStars(), reviewRequest.getComment());
 
-        BeanUtils.copyProperties(reviewRequest, review);
+        String username = authentication.getName();
 
-        Optional<Movie> movie = movieRepository.findById(reviewRequest.getMovieId());
-        Optional<User> user = userRepository.findById(reviewRequest.getUserId());
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        review.setUser(user.get());
-        review.setMovie(movie.get());
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new RuntimeException("Movie not found"));
+
+        if (reviewRepository.existsByMovieIdAndUserId(movieId, user.getId())) {
+            throw new RuntimeException("You already reviewed this movie");
+        }
+
+        BeanUtils.copyProperties(reviewDto, review);
+        review.setMovie(movie);
+        review.setUser(user);
 
         reviewRepository.save(review);
 
-        return reviewResponse;
+        return reviewDto;
     }
 
     @Override
-    public List<ReviewResponse> getReviewsOfMovie(Long id) {
+    public List<ReviewDto> getReviewsOfMovie(Long id) {
         List<Review> reviews = reviewRepository.findByMovieId(id);
-        List<ReviewResponse> reviewResponses = new ArrayList<>();
+        List<ReviewDto> reviewDtos = new ArrayList<>();
 
         for (Review r : reviews) {
-            ReviewResponse reviewResponse = new ReviewResponse();
-            BeanUtils.copyProperties(r, reviewResponse);
-            reviewResponses.add(reviewResponse);
+            ReviewDto reviewDto = new ReviewDto();
+            BeanUtils.copyProperties(r, reviewDto);
+            reviewDtos.add(reviewDto);
         }
 
-        return reviewResponses;
+        return reviewDtos;
+    }
+
+    @Override
+    public List<ReviewDto> getReviewsOfUser(Long userId) {
+        List<Review> reviews = reviewRepository.findByUserId(userId);
+        List<ReviewDto> reviewDtos = new ArrayList<>();
+
+        for (Review r : reviews) {
+            ReviewDto reviewDto = new ReviewDto();
+            BeanUtils.copyProperties(r, reviewDto);
+            reviewDtos.add(reviewDto);
+        }
+
+        return reviewDtos;
     }
 }

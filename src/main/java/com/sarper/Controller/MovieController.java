@@ -19,7 +19,6 @@ public class MovieController implements IMovieController {
     private IMovieService movieService;
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/{id}")
     public Movie getMovie(@PathVariable Long id) {
         return movieService.getMovie(id);
@@ -30,6 +29,8 @@ public class MovieController implements IMovieController {
     public List<Movie> getAllMovies() {
         return movieService.getAllMovies();
     }
+
+
 
 
 }

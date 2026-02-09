@@ -1,13 +1,14 @@
 package com.sarper.Service.interfaces;
 
-import com.sarper.Dto.ReviewRequest;
-import com.sarper.Dto.ReviewResponse;
-import com.sarper.Model.Review;
+import com.sarper.Dto.ReviewDto;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
 public interface IReviewService {
-    ReviewResponse addReview(ReviewRequest reviewRequest);
+    ReviewDto addReview(ReviewDto reviewDto, Long movieId, Authentication authentication);
 
-    List<ReviewResponse> getReviewsOfMovie(Long id);
+    List<ReviewDto> getReviewsOfMovie(Long id);
+
+    List<ReviewDto> getReviewsOfUser(Long userId);
 }
